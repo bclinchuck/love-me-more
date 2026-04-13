@@ -8,9 +8,27 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    .fade-out {
+       animation: fadeOut 0.6s ease forwards;
+    }
+
+    .fade-in {
+        animation: fadeIn 0.6s ease forwards;
+    }
+
+    @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; pointer-events: none; }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
     :root {
-      --bg: #fdf0f3; --card: #fff8f9; --accent: #d4537e;
-      --text: #4b1528; --muted: #99566e; --border: #f0c0d0;
+      --bg: #eef2f8; --card: #f8f6ff; --accent: #6b5abf;
+      --text: #261e52; --muted: #7068a0; --border: #cec8f0;
     }
 
     body {
@@ -22,6 +40,7 @@
       flex-direction: column;
       align-items: center;
       padding: 2rem 1rem;
+      overflow-x: hidden;
     }
 
     header { text-align: center; margin-bottom: 2.5rem; }
@@ -88,7 +107,7 @@
       transition: background 0.2s;
     }
 
-    button:hover { background: #b8416a; }
+    button:hover { filter: brightness(0.88); }
 
     button.secondary {
       background: transparent;
@@ -127,15 +146,29 @@
     .hidden { display: none; }
   </style>
 </head>
+
+<!-- LANDING PAGE -->
+<div id="landing" class="card" style="max-width: 560px; width: 100%; text-align: center; padding: 3rem 2rem; margin-top: 2rem;">
+  <h1 style="font-size: 2.2rem; font-weight: normal; color: var(--accent); letter-spacing: 0.05em; margin-bottom: 1rem;">love me more</h1>
+  <h3 style="font-size: 1.0rem; font-weight: normal; color: var(--accent); letter-spacing: 0.05em; margin-bottom: 1rem;">project by brandon linchuck</h3>
+  <p style="font-size: 1rem; line-height: 1.8; color: var(--muted); margin-bottom: 0.75rem;">
+    the world needs more love and kindness. love me more is a daily question, designed to spark self-reflection and cultivate self-love. it's a small moment each day just for you. 
+  </p>
+  <p style="font-size: 1rem; line-height: 1.8; color: var(--muted); margin-bottom: 2rem;">
+    this project helps remember the little things in life, the things we often overlook that can bring us joy and gratitude when we take a moment to appreciate them. it's a reminder that you are worthy. self-reflection can be a powerful tool for growth and happiness. you reign yourself. love yourself more, and the world will be a little brighter
+  </p>
+  <button onclick="enterSite()" style="width: auto; padding: 0.8rem 2.5rem;">indulge</button>
+</div>
+
 <body>
 
-  <header>
+  <header class = 'hidden'>
     <h1>love me more</h1>
-    <p>a daily question, just for you</p>
+    <p>a daily question project, just for you</p>
   </header>
 
   <!-- AUTH CARD -->
-  <div class="card" id="auth-card">
+  <div class="card hidden" id="auth-card">
     <p class="question-label" id="auth-title">Sign in</p>
     <input type="email" id="auth-email" placeholder="your email" />
     <input type="password" id="auth-password" placeholder="your password" />
@@ -161,7 +194,7 @@
         Your answer has been saved. Come back tomorrow. ♡
       </div>
       <div class="hidden" id="already-answered" style="text-align:center; padding: 1rem; color: var(--muted); font-style: italic;">
-        You've already answered today's question. ♡
+        You've already answered today's question.
       </div>
     </div>
 
@@ -176,19 +209,28 @@
     <div class="card" style="text-align: center;">
       <div class="color-switcher">
         <span>change the mood</span>
-        <div class="swatch active" style="background:#fdf0f3;" onclick="setTheme('pink',event)" title="Rose"></div>
+        <div class="swatch" style="background:#fdf0f3;" onclick="setTheme('pink',event)" title="Rose"></div>
         <div class="swatch" style="background:#f0f4f0;" onclick="setTheme('sage',event)" title="Sage"></div>
         <div class="swatch" style="background:#fdf5ec;" onclick="setTheme('peach',event)" title="Peach"></div>
-        <div class="swatch" style="background:#eef2f8;" onclick="setTheme('lavender',event)" title="Lavender"></div>
+        <div class="swatch active" style="background:#eef2f8;" onclick="setTheme('lavender',event)" title="Lavender"></div>
         <div class="swatch" style="background:#f5f0eb;" onclick="setTheme('linen',event)" title="Linen"></div>
       </div>
     </div>
 
   </div>
 
-  <footer>made with love ♡</footer>
+  <footer class="hidden" id="footer">made for the heart</footer>
 
   <script>
+
+    const themes = {
+      pink:     { bg:'#fdf0f3', card:'#fff8f9', accent:'#d4537e', text:'#4b1528', muted:'#99566e', border:'#f0c0d0' },
+      sage:     { bg:'#f0f4f0', card:'#f8fbf8', accent:'#4a7c59', text:'#1a3326', muted:'#5a7a68', border:'#c3d9cb' },
+      peach:    { bg:'#fdf5ec', card:'#fffaf5', accent:'#c4703a', text:'#4a2010', muted:'#9a6040', border:'#f0c8a8' },
+      lavender: { bg:'#eef2f8', card:'#f8f6ff', accent:'#6b5abf', text:'#261e52', muted:'#7068a0', border:'#cec8f0' },
+      linen:    { bg:'#f5f0eb', card:'#fdfaf7', accent:'#8b6f47', text:'#3a2d1e', muted:'#8a7060', border:'#d9c9b0' },
+    };
+
     const SUPABASE_URL = 'https://usceygitgahbqkqmckry.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVzY2V5Z2l0Z2FoYnFrcW1ja3J5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwMzEwNjcsImV4cCI6MjA5MTYwNzA2N30.l2UK3PO8L0WnvsjveciWuyzeuPXWSJ1frWC9WUQoO84';
     const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -197,12 +239,30 @@
     let currentQuestion = null;
     let isSignUp = false;
 
+    function enterSite() {
+        const landing = document.getElementById('landing');
+        landing.classList.add('fade-out');
+        setTimeout(() => {
+            landing.classList.add('hidden');
+            const header = document.querySelector('header');
+            const authCard = document.getElementById('auth-card');
+            const footer = document.getElementById('footer');
+            header.classList.remove('hidden');
+            authCard.classList.remove('hidden');
+            footer.classList.remove('hidden');
+            header.classList.add('fade-in');
+            authCard.classList.add('fade-in');
+            footer.classList.add('fade-in');
+        }, 600);
+    }
+
     // ── INIT ──────────────────────────────────────────
     async function init() {
-      const { data: { session } } = await sb.auth.getSession();
-      if (session) {
-        currentUser = session.user;
-        showApp();
+        loadSavedTheme();
+        const { data: { session } } = await sb.auth.getSession();
+        if (session) {
+            currentUser = session.user;
+            showApp();
       }
     }
 
@@ -254,10 +314,13 @@
 
     // ── APP ───────────────────────────────────────────
     async function showApp() {
-      document.getElementById('auth-card').classList.add('hidden');
-      document.getElementById('app').classList.remove('hidden');
-      document.getElementById('user-bar').innerHTML = `Signed in as ${currentUser.email} — <a onclick="signOut()">sign out</a>`;
-      await loadQuestion();
+        document.getElementById('landing').classList.add('hidden');
+        document.getElementById('auth-card').classList.add('hidden');
+        document.getElementById('app').classList.remove('hidden');
+        document.querySelector('header').classList.remove('hidden');
+        document.getElementById('footer').classList.remove('hidden');
+        document.getElementById('user-bar').innerHTML = `Signed in as ${currentUser.email} — <a onclick="signOut()">sign out</a>`;
+        await loadQuestion();
     }
 
     async function signOut() {
@@ -267,13 +330,17 @@
 
     // ── QUESTION ──────────────────────────────────────
     async function loadQuestion() {
-      const today = new Date().toISOString().split('T')[0];
+      const today = new Date().toLocaleDateString('en-CA');
+      console.log('Looking for date:', today);
 
       const { data, error } = await sb
         .from('questions')
         .select('*')
         .eq('show_date', today)
         .single();
+
+      console.log('Data:', data);
+      console.log('Error:', error);
 
       if (error || !data) {
         document.getElementById('question-text').textContent = 'No question for today yet. Check back soon.';
@@ -323,58 +390,74 @@
     // ── PAST ANSWERS ──────────────────────────────────
     let pastVisible = false;
     async function togglePastAnswers() {
-      const list = document.getElementById('past-answers-list');
-      const btn = document.querySelector('#app .card:nth-child(3) button');
+        const list = document.getElementById('past-answers-list');
+        const btn = document.querySelector('#app .card:nth-child(3) button');
 
-      if (pastVisible) {
-        list.classList.add('hidden');
-        btn.textContent = 'Show my answers';
-        pastVisible = false;
-        return;
-      }
+        if (pastVisible) {
+            list.classList.add('hidden');
+            btn.textContent = 'Show my answers';
+            pastVisible = false;
+            return;
+        }
 
-      btn.textContent = 'Hide my answers';
-      pastVisible = true;
-      list.classList.remove('hidden');
-      list.innerHTML = '<p style="color:var(--muted)">Loading...</p>';
+        btn.textContent = 'Hide my answers';
+        pastVisible = true;
+        list.classList.remove('hidden');
+        list.innerHTML = '<p style="color:var(--muted)">Loading...</p>';
 
-      const { data, error } = await sb
-        .from('answers')
-        .select('answer_text, created_at, question_id, questions(question_text, show_date)')
-        .eq('user_id', currentUser.id)
-        .order('created_at', { ascending: false });
+        const { data, error } = await sb
+            .from('answers')
+            .select('answer_text, created_at, question_id, questions(question_text, show_date)')
+            .eq('user_id', currentUser.id)
+            .order('created_at', { ascending: false });
 
-      if (error || !data || data.length === 0) {
-        list.innerHTML = '<p style="color:var(--muted); font-style:italic;">No past answers yet.</p>';
-        return;
-      }
+        console.log('User ID:', currentUser.id);
+        console.log('Answers data:', data);
+        console.log('Answers error:', error);
 
-      list.innerHTML = data.map(a => `
-        <div class="past-answer">
-          <p class="past-date">${new Date(a.questions.show_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
-          <p class="past-question">${a.questions.question_text}</p>
-          <p class="past-text">${a.answer_text}</p>
-        </div>
-      `).join('');
-    }
+        if (error || !data || data.length === 0) {
+            list.innerHTML = '<p style="color:var(--muted); font-style:italic;">No past answers yet.</p>';
+            return;
+        }
+
+        list.innerHTML = data.map(a => `
+            <div class="past-answer">
+            <p class="past-date">${new Date(a.questions.show_date + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+            <p class="past-question">${a.questions.question_text}</p>
+            <p class="past-text">${a.answer_text}</p>
+            </div>
+        `).join('');
+        }
 
     // ── THEME ─────────────────────────────────────────
-    const themes = {
-      pink:     { bg:'#fdf0f3', card:'#fff8f9', accent:'#d4537e', text:'#4b1528', muted:'#99566e', border:'#f0c0d0' },
-      sage:     { bg:'#f0f4f0', card:'#f8fbf8', accent:'#4a7c59', text:'#1a3326', muted:'#5a7a68', border:'#c3d9cb' },
-      peach:    { bg:'#fdf5ec', card:'#fffaf5', accent:'#c4703a', text:'#4a2010', muted:'#9a6040', border:'#f0c8a8' },
-      lavender: { bg:'#eef2f8', card:'#f8f6ff', accent:'#6b5abf', text:'#261e52', muted:'#7068a0', border:'#cec8f0' },
-      linen:    { bg:'#f5f0eb', card:'#fdfaf7', accent:'#8b6f47', text:'#3a2d1e', muted:'#8a7060', border:'#d9c9b0' },
-    };
 
     function setTheme(name, event) {
-      const t = themes[name];
-      const r = document.documentElement.style;
-      r.setProperty('--bg', t.bg); r.setProperty('--card', t.card);
-      r.setProperty('--accent', t.accent); r.setProperty('--text', t.text);
-      r.setProperty('--muted', t.muted); r.setProperty('--border', t.border);
-      document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
-      event.target.classList.add('active');
+        const t = themes[name];
+        const r = document.documentElement.style;
+        r.setProperty('--bg', t.bg); r.setProperty('--card', t.card);
+        r.setProperty('--accent', t.accent); r.setProperty('--text', t.text);
+        r.setProperty('--muted', t.muted); r.setProperty('--border', t.border);
+        document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+        if (event) event.target.classList.add('active');
+        localStorage.setItem('lmm-theme', name);
+        console.log('Saved theme:', localStorage.getItem('lmm-theme'));
+    }
+
+    function loadSavedTheme() {
+        console.log('Loading theme:', localStorage.getItem('lmm-theme'));
+        const saved = localStorage.getItem('lmm-theme') || 'lavender';
+        const t = themes[saved];
+        const r = document.documentElement.style;
+        r.setProperty('--bg', t.bg); r.setProperty('--card', t.card);
+        r.setProperty('--accent', t.accent); r.setProperty('--text', t.text);
+        r.setProperty('--muted', t.muted); r.setProperty('--border', t.border);
+        document.querySelectorAll('.swatch').forEach(s => {
+            if (s.title.toLowerCase() === saved.toLowerCase()) {
+                s.classList.add('active');
+            } else {
+                s.classList.remove('active');
+            }
+        });
     }
   </script>
 
