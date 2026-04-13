@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Love Me More</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #fdf0f3;
+      --card: #fff8f9;
+      --accent: #d4537e;
+      --accent-light: #f4c0d1;
+      --text: #4b1528;
+      --text-muted: #99566e;
+      --border: #f0c0d0;
+    }
+
+    body {
+      font-family: 'Georgia', serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: normal;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+    }
+
+    header p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-top: 0.4rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 560px;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+
+    .question-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .question-text {
+      font-size: 1.35rem;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      font-family: 'Georgia', serif;
+      font-size: 1rem;
+      color: var(--text);
+      background: var(--bg);
+      resize: vertical;
+      min-height: 120px;
+      margin-top: 1.25rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    textarea:focus {
+      border-color: var(--accent);
+    }
+
+    textarea::placeholder {
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+
+    button.submit {
+      margin-top: 1rem;
+      width: 100%;
+      padding: 0.8rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: 'Georgia', serif;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button.submit:hover {
+      background: #b8416a;
+    }
+
+    .confirmation {
+      display: none;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 1.1rem;
+      color: var(--accent);
+    }
+
+    .color-switcher {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    .color-switcher span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      width: 100%;
+      text-align: center;
+      margin-bottom: 0.25rem;
+    }
+
+    .swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+
+    .swatch:hover { transform: scale(1.15); }
+    .swatch.active { border-color: var(--text); }
+
+    footer {
+      margin-top: 2rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>love me more</h1>
+    <p>a daily question, just for you</p>
+  </header>
+
+  <div class="card">
+    <p class="question-label">Today's question</p>
+    <p class="question-text" id="question">What is something you did today that you're proud of, even if it feels small?</p>
+
+    <div id="answer-section">
+      <textarea id="answer-input" placeholder="Write your answer here..."></textarea>
+      <button class="submit" onclick="submitAnswer()">Save my answer</button>
+    </div>
+
+    <div class="confirmation" id="confirmation">
+      Your answer has been saved. Come back tomorrow. ♡
+    </div>
+  </div>
+
+  <div class="card" style="text-align: center;">
+    <div class="color-switcher">
+      <span>change the mood</span>
+      <div class="swatch active" style="background:#fdf0f3;" onclick="setTheme('pink')" title="Rose"></div>
+      <div class="swatch" style="background:#f0f4f0;" onclick="setTheme('sage')" title="Sage"></div>
+      <div class="swatch" style="background:#fdf5ec;" onclick="setTheme('peach')" title="Peach"></div>
+      <div class="swatch" style="background:#eef2f8;" onclick="setTheme('lavender')" title="Lavender"></div>
+      <div class="swatch" style="background:#f5f0eb;" onclick="setTheme('linen')" title="Linen"></div>
+    </div>
+  </div>
+
+  <footer>made with love ♡</footer>
+
+  <script>
+    const themes = {
+      pink:     { bg:'#fdf0f3', card:'#fff8f9', accent:'#d4537e', accentLight:'#f4c0d1', text:'#4b1528', muted:'#99566e', border:'#f0c0d0' },
+      sage:     { bg:'#f0f4f0', card:'#f8fbf8', accent:'#4a7c59', accentLight:'#b8d8c3', text:'#1a3326', muted:'#5a7a68', border:'#c3d9cb' },
+      peach:    { bg:'#fdf5ec', card:'#fffaf5', accent:'#c4703a', accentLight:'#f5c9a8', text:'#4a2010', muted:'#9a6040', border:'#f0c8a8' },
+      lavender: { bg:'#eef2f8', card:'#f8f6ff', accent:'#6b5abf', accentLight:'#cec8f0', text:'#261e52', muted:'#7068a0', border:'#cec8f0' },
+      linen:    { bg:'#f5f0eb', card:'#fdfaf7', accent:'#8b6f47', accentLight:'#d9c9b0', text:'#3a2d1e', muted:'#8a7060', border:'#d9c9b0' },
+    };
+
+    function setTheme(name) {
+      const t = themes[name];
+      const r = document.documentElement.style;
+      r.setProperty('--bg', t.bg);
+      r.setProperty('--card', t.card);
+      r.setProperty('--accent', t.accent);
+      r.setProperty('--accent-light', t.accentLight);
+      r.setProperty('--text', t.text);
+      r.setProperty('--text-muted', t.muted);
+      r.setProperty('--border', t.border);
+      document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    function submitAnswer() {
+      const answer = document.getElementById('answer-input').value.trim();
+      if (!answer) return;
+      document.getElementById('answer-section').style.display = 'none';
+      document.getElementById('confirmation').style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>
